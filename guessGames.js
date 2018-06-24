@@ -1,80 +1,94 @@
-let firstArg = +process.argv[2]
-let secondArg = +process.argv[3]
-gameChoice();
+let firstArg = 0;
+let secondArg = 100;
+let amoutOfGuesses;
+let guessedNumber = getRandom(firstArg, secondArg)
 
-function gameChoice() {
-    console.log('Press H to play human guess or C to play computer guess')
-    process.stdin.removeAllListeners('data');
-    process.stdin.once('data', (chunk) => {
-        let Answer = capitalization(chunk);
-        if (Answer == 'H') {
-            humanGuess(firstArg, secondArg)
-        } else if (Answer == 'C') {
-            computerguess(firstArg, secondArg)
-        }
-    });
+let gameChoiceElement = document.getElementById('gameChoice')
+let computerGameElement = document.getElementById('computerGame')
+let humanGameElement = document.getElementById('humanGame')
+
+function say(message) {
+    document.getElementById('output').textContent = message;
+}
+function startGame() {
+    say('Press H to play human guess or C to play computer guess')
+    amoutOfGuesses = 1
+    gameChoiceElement.className = ''
+    computerGameElement.className = 'hidden'
+    humanGameElement.className = 'hidden'
+}
+
+function gameChoice(Answer) {
+    if (Answer == 'H') {
+        gameChoiceElement.className = 'hidden'
+        computerGameElement.className = 'hidden'
+        humanGameElement.className = ''
+        say('I am thinking of a number between '
+            + firstArg + ' and ' + secondArg +
+            '. Please guess what it is.')
+    } else if (Answer == 'C') {
+        gameChoiceElement.className = 'hidden'
+        computerGameElement.className = ''
+        humanGameElement.className = 'hidden'
+        say('Please think of a number between ' + firstArg + ' and ' + secondArg +
+            ' (inclusive).\n I will try to guess it.\n Is it...' + guessedNumber +
+            '\n Press Correct Button if it is correct,\n Press High Button if its higher than ' + guessedNumber +
+            ',\n Press Low Button if its lower than ' + guessedNumber)
+    }
 }
 /*
 Human guesses computer's number
 */
-function humanGuess(firstArg, secondArg) {
-    let theNum = getRandom(firstArg, secondArg);
-    console.log('I am thinking of a number between '
-        + firstArg + ' and ' + secondArg +
-        '. Please guess what it is.')
+function humanGuess() {
+    let Answer = document.querySelector('#humanGame input').value
+    console.log('Human input ' + Answer)
+    console.log('Comput number ' + guessedNumber)
+    if (Answer == guessedNumber) {
+        say('You got it! The number is ' + Answer + '!\n In just ' + amoutOfGuesses + ' tries!')
+       
+    } else {
+        amoutOfGuesses++
+        if (Answer > guessedNumber) {
+            say('Your guess of ' + Answer + ' is too high!')
+            
 
-    let x = 1
-
-    process.stdin.on('data', (chunk) => {
-        let Answer = chunk;
-        if (Answer == theNum) {
-            console.log('You got it! The number is ' + Answer + '!')
-            console.log('In just ' + x + ' tries!')
-            gameChoice();
-        } else {
-            x++
-            if (Answer > theNum) { console.log('Your guess is too high!') }
-            if (Answer < theNum) { console.log('Your guess is too low!') }
-            console.log('Please guess again...')
         }
-    })
+        if (Answer < guessedNumber) {
+            say('Your guess of ' + Answer + ' is too low!')
+           
+        }
+
+    }
+    document.querySelector('#humanGame input').value = '';
 }
 /*
 Computer guesses Human's number
 */
-function computerguess(min, max) {
-    let i = 1;
-    let guessedNumber = getRandom(min, max);
-    console.log('Please think of a number between ' + min + ' and ' + max + ' (inclusive).');
-    console.log('I will try to guess it.');
-    console.log('Is it...' + guessedNumber);
-    console.log('Enter Y for Yes, H if its higher than ' + guessedNumber + ', L if its lower than ' + guessedNumber + ': H')
-    process.stdin.on('data', (answer) => {
-        answer = capitalization(answer);
-        if (answer === 'Y') {
-            console.log('Your number was ' + guessedNumber + '!');
-            console.log('I guessed it in ' + i + ' tries.');
-            gameChoice();
+function computerguess(Answer) {
 
-        } else {
-            if (answer === 'H') {
-                min = guessedNumber + 1
-                i++;
-            } if (answer === 'L') {
-                max = guessedNumber - 1
-                i++;
-            }
-            guessedNumber = getRandom(min, max);
+    if (Answer === 'C') {
+        say('Your number was ' + guessedNumber + '!\n I guessed it in ' + amoutOfGuesses + ' tries.');
 
-            if (min > max) {
-                console.log('I think you are trying to cheat.');
-                process.exit()
-            }
-            console.log('Is ' + guessedNumber + ' your number?');
+    } else {
+
+
+        if (Answer === 'H') {
+            firstArg = guessedNumber + 1
+            amoutOfGuesses++;
         }
-    });
-
+        if (Answer === 'L') {
+            secondArg = guessedNumber - 1
+            amoutOfGuesses++;
+        }
+        guessedNumber = getRandom(firstArg, secondArg);
+        if (firstArg > secondArg) {
+            say('I think you are trying to cheat.');
+            startGame()
+        }
+        say('Is ' + guessedNumber + ' your number?');
+    }
 }
+
 
 function capitalization(name) {
     let nameClean = name.toString().trim();
@@ -85,6 +99,5 @@ function capitalization(name) {
 function getRandom(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    // console.log(“between ” + min + ” and ” + max)
     return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }

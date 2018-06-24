@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Guess Number Game</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <h1>The Guess Number Game</h1>
+
+    <main>
+        <pre id=output>
+
+        </pre>
+        <div class='gameChoice' id='gameChoice'>
+            <button id='hGuess' onclick='gameChoice("H")'>Human Guess</button>
+            <button id='cGuess' onclick='gameChoice("C")'>Computer Guess</button>
+        </div>
+        <div class='computerGame' id='computerGame'>
+            <button id='correct' onclick='computerguess("C")'>Correct</button>
+            <button id='high' onclick='computerguess("H")'>High</button>
+            <button id='low' onclick='computerguess("L")'>Low</button>
+        </div>
+        <div class='humanGame' id='humanGame'>
+            <input type="text" name='hGuessInput' placeholder="Enter Guess Here." />
+            <button id='low' onclick='humanGuess()'>Low</button>
+        </div>
+
+    </main>
+    <script src='guessGames.js'> </script>
+    <script>
+        startGame()
+    </script>
+</body>
+
+</html>
