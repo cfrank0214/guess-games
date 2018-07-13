@@ -1,7 +1,7 @@
-let firstArg = 0;
-let secondArg = 100;
+let firstArg;
+let secondArg;
 let amoutOfGuesses;
-let guessedNumber = getRandom(firstArg, secondArg)
+let guessedNumber 
 
 let gameChoiceElement = document.getElementById('gameChoice')
 let computerGameElement = document.getElementById('computerGame')
@@ -11,29 +11,31 @@ function say(message) {
     document.getElementById('output').textContent = message;
 }
 function startGame() {
-    say('Press H to play human guess or C to play computer guess')
+    say('Please choose which kind of game you want to play.')
+    firstArg = 0;
+    secondArg = 100;
     amoutOfGuesses = 1
+    guessedNumber = getRandom(firstArg, secondArg)
+    
     gameChoiceElement.className = ''
-    computerGameElement.className = 'hidden'
-    humanGameElement.className = 'hidden'
+    computerGameElement.className = "invisible"
+    humanGameElement.className = 'invisible'
 }
 
 function gameChoice(Answer) {
     if (Answer == 'H') {
-        gameChoiceElement.className = 'hidden'
-        computerGameElement.className = 'hidden'
+        gameChoiceElement.className = 'invisible'
+        computerGameElement.className = 'invisible'
         humanGameElement.className = ''
         say('I am thinking of a number between '
             + firstArg + ' and ' + secondArg +
             '. Please guess what it is.')
     } else if (Answer == 'C') {
-        gameChoiceElement.className = 'hidden'
+        gameChoiceElement.className = 'invisible'
         computerGameElement.className = ''
-        humanGameElement.className = 'hidden'
-        say('Please think of a number between ' + firstArg + ' and ' + secondArg +
-            ' (inclusive).\n I will try to guess it.\n Is it...' + guessedNumber +
-            '\n Press Correct Button if it is correct,\n Press High Button if its higher than ' + guessedNumber +
-            ',\n Press Low Button if its lower than ' + guessedNumber)
+        humanGameElement.className = 'invisible'
+        say('Please think of a number \n  between ' + firstArg + ' and ' + secondArg +
+            '\n I will try to guess it.\n Is it...' + guessedNumber + ' ?')
     }
 }
 /*
@@ -45,17 +47,18 @@ function humanGuess() {
     console.log('Comput number ' + guessedNumber)
     if (Answer == guessedNumber) {
         say('You got it! The number is ' + Answer + '!\n In just ' + amoutOfGuesses + ' tries!')
-       
+        setTimeout(function(){ startGame(); }, 3000);
+
     } else {
         amoutOfGuesses++
         if (Answer > guessedNumber) {
             say('Your guess of ' + Answer + ' is too high!')
-            
+
 
         }
         if (Answer < guessedNumber) {
             say('Your guess of ' + Answer + ' is too low!')
-           
+
         }
 
     }
@@ -68,6 +71,8 @@ function computerguess(Answer) {
 
     if (Answer === 'C') {
         say('Your number was ' + guessedNumber + '!\n I guessed it in ' + amoutOfGuesses + ' tries.');
+        setTimeout(function(){ startGame(); }, 3000);
+        
 
     } else {
 
